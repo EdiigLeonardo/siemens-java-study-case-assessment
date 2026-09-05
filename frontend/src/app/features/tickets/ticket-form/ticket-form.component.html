@@ -1,0 +1,13 @@
+<h2>Novo ticket</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input formControlName="title" placeholder="Titulo" />
+  <textarea formControlName="description" placeholder="Descricao"></textarea>
+  <select formControlName="priority">
+    <option value="LOW">LOW</option>
+    <option value="MEDIUM">MEDIUM</option>
+    <option value="HIGH">HIGH</option>
+    <option value="CRITICAL">CRITICAL</option>
+  </select>
+  <input formControlName="requesterEmail" placeholder="Email" />
+  <button type="submit">Criar</button>
+</form>

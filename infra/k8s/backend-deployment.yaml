@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: backend }
+  template:
+    metadata:
+      labels: { app: backend }
+    spec:
+      containers:
+        - name: backend
+          image: selfservice-backend:latest
+          ports: [{ containerPort: 8080 }]
+          # BUG: falta readinessProbe e livenessProbe.
+          envFrom:
+            - configMapRef: { name: backend-config }

@@ -1,0 +1,10 @@
+# BUG: password da BD num ConfigMap (texto plano), devia estar num Secret.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  DB_HOST: "db"
+  DB_NAME: "selfservice"
+  DB_USER: "selfservice"
+  DB_PASSWORD: "selfservice"

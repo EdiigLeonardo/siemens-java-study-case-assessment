@@ -1,0 +1,17 @@
+name: CI/CD
+on: [push]
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # BUG: sem cache de dependencias Maven (~/.m2) -> build lento sempre.
+      - name: Build backend
+        run: cd backend && mvn -B package
+      - name: Docker build & push
+        # BUG: falta "needs"/step de testes antes disto - se mvn package
+        # falhar silenciosamente ou os testes forem ignorados, a imagem
+        # e publicada na mesma.
+        run: |
+          docker build -t selfservice-backend ./backend
+          docker push selfservice-backend

@@ -1,0 +1,6 @@
+<div *ngIf="ticket">
+  <h2>{{ ticket.title }}</h2>
+  <p>{{ ticket.description }}</p>
+  <p>Status: {{ ticket.status }} | Prioridade: {{ ticket.priority }}</p>
+  <button (click)="resolve()">Marcar como resolvido</button>
+</div>
