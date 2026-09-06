@@ -1,0 +1,26 @@
+apiVersion:  apps/v1
+kind: Deployment
+metadata: { name: expenses-backend }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: expenses-backend } }
+  template:
+    metadata: { labels: { app: expenses-backend } }
+    spec:
+      containers:
+        - name: backend
+          image: expenses-backend:1.0.0
+          ports: [{ containerPort: 8080 }]
+          # BUG: sem resources.requests -> o HPA abaixo nao consegue calcular
+          # % de CPU usado (precisa de um "requests" de referencia) e nunca escala.
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: { name: expenses-backend-hpa }
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: expenses-backend }
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }

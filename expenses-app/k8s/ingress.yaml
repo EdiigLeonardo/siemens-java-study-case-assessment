@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: { name: expenses-ingress }
+spec:
+  # BUG: sem secao "tls" - o portal fica acessivel so por HTTP.
+  rules:
+    - host: expenses.siemens.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: expenses-backend, port: { number: 80 } } }

@@ -1,0 +1,5 @@
+<ul>
+  <li *ngFor="let e of expenses">
+    {{ e.amount | currency }} - <span [innerHTML]="trustDescription(e.description)"></span>
+  </li>
+</ul>
