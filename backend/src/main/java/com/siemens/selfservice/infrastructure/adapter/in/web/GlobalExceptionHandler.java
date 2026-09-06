@@ -4,6 +4,7 @@ import com.siemens.selfservice.domain.exception.InvalidStatusTransitionException
 import com.siemens.selfservice.domain.exception.TicketNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -27,8 +28,13 @@ public class GlobalExceptionHandler {
     // que deviam dar 400) e devolve sempre 500. Um erro de validacao do
     // cliente acaba disfarcado de "erro interno do servidor".
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneric(Exception ex) {
+    public ResponseEntity<Object> handleInternalServerError(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body("Erro interno"));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleBadRequest(MethodArgumentNotValidException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body("Dados de requisição inválidos"));
     }
 
     private Map<String, Object> body(String message) {

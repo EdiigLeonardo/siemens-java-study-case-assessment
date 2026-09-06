@@ -40,7 +40,7 @@ public class TicketController {
     @Operation(summary = "Criar um novo ticket")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TicketResponse create(@RequestBody CreateTicketRequest request) {
+    public TicketResponse create(@Valid @RequestBody CreateTicketRequest request) {
         Ticket ticket = createTicketUseCase.create(
                 request.title, request.description, request.priority, request.requesterEmail);
         return mapper.toResponse(ticket);
@@ -57,13 +57,13 @@ public class TicketController {
     public TicketResponse getById(@PathVariable UUID id) {
         return mapper.toResponse(getTicketUseCase.getById(id));
     }
-    
+
     // Uma alteracao de estado (mudar o status) devia ser um PATCH/PUT, nao um POST.
     @Operation(summary = "Atualizar o status de um ticket")
-    @PostMapping("/{id}/status")
+    @PatchMapping("/{id}/status")
     public TicketResponse updateStatus(@PathVariable UUID id, @Valid @RequestBody UpdateStatusRequest request) {
         return mapper.toResponse(updateTicketStatusUseCase.updateStatus(id, request.status));
-    }
+    }   
 
     @Operation(summary = "Atribuir um ticket a alguem")
     @PatchMapping("/{id}/assign")

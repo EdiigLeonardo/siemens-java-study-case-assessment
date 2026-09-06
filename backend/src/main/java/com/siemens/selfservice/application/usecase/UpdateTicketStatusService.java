@@ -21,6 +21,7 @@ public class UpdateTicketStatusService implements UpdateTicketStatusUseCase {
     }
 
     @Override
+    @Transactional
     public Ticket updateStatus(UUID id, TicketStatus newStatus) {
         Ticket ticket = validateAndFetch(id, newStatus);
         ticket.changeStatus(newStatus);
@@ -30,7 +31,6 @@ public class UpdateTicketStatusService implements UpdateTicketStatusUseCase {
     // @Transactional aqui nao tem qualquer efeito pratico: e chamado a partir
     // de updateStatus() na MESMA instancia (this.validateAndFetch(...)),
     // por isso nunca passa pelo proxy do Spring que aplicaria a transacao.
-    @Transactional
     public Ticket validateAndFetch(UUID id, TicketStatus newStatus) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(id));
