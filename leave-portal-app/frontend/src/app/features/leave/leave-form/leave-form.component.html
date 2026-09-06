@@ -1,0 +1,12 @@
+<h2>Novo pedido</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input type="date" formControlName="startDate" />
+  <input type="date" formControlName="endDate" />
+  <select formControlName="type">
+    <option value="VACATION">VACATION</option>
+    <option value="SICK">SICK</option>
+    <option value="UNPAID">UNPAID</option>
+  </select>
+  <textarea formControlName="reason"></textarea>
+  <button type="submit" [disabled]="form.invalid">Submeter</button>
+</form>

@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:incidents}
+    username: ${DB_USER:incidents}
+    password: ${DB_PASSWORD:incidents}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    # BUG: open-in-view fica no default (true) -> esconde N+1, prende conexoes.
+  flyway:
+    locations: classpath:db/migration
+notification:
+  sender_name: siemens-bot   # BUG: chave tem underscore; codigo pede "sender-name".
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"   # BUG: todos os endpoints do Actuator expostos, sem seguranca.

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment          # BUG: devia ser StatefulSet (identidade+ordem) para uma BD.
+metadata: { name: postgres }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: postgres } }
+  template:
+    metadata: { labels: { app: postgres } }
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports: [{ containerPort: 5432 }]
+          # BUG: sem volumeMounts/PVC -> dados perdidos a cada restart do pod (storage efemero).
+---
+apiVersion: v1
+kind: Service
+metadata: { name: postgres }
+spec:
+  selector: { app: postgres }
+  type: LoadBalancer   # BUG: expoe a porta 5432 da BD na internet, devia ser ClusterIP.
+  ports: [{ port: 5432, targetPort: 5432 }]

@@ -1,0 +1,4 @@
+<!-- BUG: mistura ngModel (template-driven) com formControlName (reactive) no mesmo input. -->
+<input [(ngModel)]="filterText" formControlName="email" (input)="search$.next(filterText)" />
+<ul><li *ngFor="let b of bookings">{{ b.requesterEmail }} - {{ b.status }}</li></ul>
+<button (click)="removeFirst()">Remover primeira (bug)</button>

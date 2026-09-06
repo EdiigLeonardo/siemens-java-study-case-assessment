@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incidents-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: incidents-backend }
+  template:
+    metadata:
+      labels: { app: incidents-api }   # BUG: label diferente do selector -> Service fica sem endpoints.
+    spec:
+      # BUG: sem terminationGracePeriodSeconds/preStop -> pod morre a meio de pedidos em curso no rollout.
+      containers:
+        - name: backend
+          image: incidents-backend:latest   # BUG: tag "latest" -> deploy nao reprodutivel, rollback impossivel.
+          ports: [{ containerPort: 8080 }]
+          # BUG: sem resources.requests/limits -> pod pode consumir toda a memoria/CPU do node.

@@ -1,0 +1,5 @@
+<div #box>
+  <p>Total: {{ total() }}</p>
+  <!-- BUG: objeto literal criado a cada CD -> quebra a otimizacao do OnPush no filho -->
+  <ul><li *ngFor="let i of incidents">{{ i.title }}</li></ul>
+</div>

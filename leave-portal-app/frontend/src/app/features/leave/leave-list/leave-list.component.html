@@ -1,0 +1,7 @@
+<h2>Pedidos de ferias</h2>
+<button (click)="refresh()">Atualizar</button>
+<ul>
+  <li *ngFor="let l of (leaves$ | async)?.content">
+    {{ l.startDate }} - {{ l.endDate }} ({{ l.type }}) - {{ l.status }}
+  </li>
+</ul>
