@@ -34,11 +34,11 @@ public class TicketPersistenceAdapter implements TicketRepositoryPort {
 
     @Override
     public Page<Ticket> findAll(TicketStatus statusFilter, Pageable pageable) {
-        // O filtro por status e recebido mas nunca e aplicado a query -
-        // devolve sempre todos os tickets, ignorando o parametro.
-        return jpaRepository.findAll(pageable).map(mapper::toDomain);
+        Page<TicketJpaEntity> entities = (statusFilter != null)
+                ? jpaRepository.findAllByStatus(statusFilter, pageable)
+                : jpaRepository.findAll(pageable);
+        return entities.map(mapper::toDomain);
     }
-
     @Override
     public boolean existsById(UUID id) {
         return jpaRepository.existsById(id);
