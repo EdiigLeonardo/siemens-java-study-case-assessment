@@ -2,11 +2,15 @@
 # para dentro da imagem final. A imagem de producao acaba com ferramentas de
 # build, cache do Maven e codigo fonte que nunca deviam la estar.
 # (Compara com um Dockerfile multi-stage no README/ANSWERS.)
-FROM maven:3.9-eclipse-temurin-21
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
+FROM eclipse-temurin:21-jre-alpine
+
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
-CMD ["java", "-jar", "target/selfservice-portal-0.1.0.jar"]
+CMD ["java", "-jar", "app.jar"]
