@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:kb}
+    username: ${DB_USER:kb}
+    password: ${DB_PASSWORD:kb}
+    hikari:
+      maximum-pool-size: 50   # BUG: 50 x N replicas facilmente excede o max_connections do Postgres.
+  jpa: { hibernate: { ddl-auto: validate } }
+  flyway: { locations: classpath:db/migration }

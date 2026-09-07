@@ -1,0 +1,3 @@
+# BUG: nao existe ConfigMap nenhum - o application.yml (com URLs/valores por
+# ambiente) fica compilado dentro do jar/imagem. Mudar de dev para prod
+# obriga a rebuild da imagem em vez de so trocar configuracao externa.

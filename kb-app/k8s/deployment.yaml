@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: kb-backend }
+spec:
+  replicas: 4
+  selector: { matchLabels: { app: kb-backend } }
+  template:
+    metadata: { labels: { app: kb-backend } }
+    spec:
+      # BUG: sem podAntiAffinity/topologySpreadConstraints - os 4 replicas
+      # podem ir todos parar ao mesmo node; esse node cair derruba a app toda
+      # apesar de "parecer" alta disponibilidade.
+      containers:
+        - name: backend
+          image: kb-backend:1.0.0
+          ports: [{ containerPort: 8080 }]
+          # BUG: 4 replicas x hikari.maximum-pool-size=50 (ver application.yml)
+          # = 200 ligacoes potenciais, sem PgBouncer/connection pooler a
+          # frente do Postgres -> esgota max_connections sob carga.
